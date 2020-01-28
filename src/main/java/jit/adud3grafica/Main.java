@@ -133,7 +133,7 @@ public class Main extends javax.swing.JFrame {
         XMLReader procesadorXML = null;
 
         try {
-
+           
             //Creamos un parseador de texto y le añadimos la clase que va a parsear el texto
             procesadorXML = XMLReaderFactory.createXMLReader();
             ParserXML persoasXML = new ParserXML();
