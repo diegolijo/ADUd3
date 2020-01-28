@@ -1,5 +1,5 @@
-
 package jit.adud3grafica;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -46,11 +46,10 @@ public class Tablas {
             Logger.getLogger(Metodos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
-        public static void createEmpleado(Connection con) {
+
+    public static void createEmpleado(Connection con) {
         try {
-            String sql = "CREATE TABLE IF NOT EXISTS producto (id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT NOT NULL UNIQUE, descripcion TEXT , prezo INTEGER NOT NULL)";
+            String sql = "CREATE TABLE IF NOT EXISTS empleado (id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT NOT NULL , apellidos TEXT NOT NULL)";
             Statement stmt = con.createStatement();
             stmt.execute(sql);
 
@@ -58,6 +57,18 @@ public class Tablas {
             Logger.getLogger(Metodos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+        public static void createCliente(Connection con) {
+        try {
+            String sql = "CREATE TABLE IF NOT EXISTS empleado (id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT NOT NULL , apellidos TEXT NOT NULL, email TEXT NOT NULL)";
+            Statement stmt = con.createStatement();
+            stmt.execute(sql);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Metodos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     
     
 
@@ -73,4 +84,16 @@ public class Tablas {
         }
 
     }
+    
+       public static void createHorasEmpleado(Connection con) {
+        try {
+            String sql = "CREATE TABLE IF NOT EXISTS horasEmpleado (idEmpleado INTEGER NOT NULL , idTenda INTEGER NOT NULL, horas INTEGER NOT NULL)";
+            Statement stmt = con.createStatement();
+            stmt.execute(sql);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Metodos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
 }
