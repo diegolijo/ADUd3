@@ -78,9 +78,7 @@ public class ParserXML extends DefaultHandler {
         this.cadenaTexto = new String(ch, start, length);
     }
 
-    /*
-     * Devuelve el ArrayList de las noticias
-     */
+ 
     public ArrayList<Noticia> getNoticias() {
         return noticias;
     }

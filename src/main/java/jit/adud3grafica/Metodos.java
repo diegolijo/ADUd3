@@ -17,53 +17,8 @@ import java.util.ArrayList;
 
 public class Metodos {
 
-    private static final String rutaJson = System.getProperty("user.dir") + "\\Provincias.json";
-    public static final String rutaBBDD = System.getProperty("user.dir") + "\\BBDDsqlite";
-
-    public static void leerJson() {
-
-        //leemos el json
-        Gson gson = new Gson();
-        java.lang.reflect.Type tipoProvincias = new TypeToken<ArrayList<Provincia>>() {
-        }.getType();
-
-        // serializamos el archivo en un array de objetos provincia
-        if (new File(rutaJson).exists()) {
-
-            ArrayList<Provincia> provincias = gson.fromJson(leerJson(new File(rutaJson)), tipoProvincias);
-
-            //creamos la conexion a bd y tablas
-            Connection con = conexion();
-            Tablas.crearTablas(con);
-
-            //recprrecos cada provincia del array e insertamos en la tabla si no existe 
-            for (Provincia e : provincias) {
-                if (selectProvincia(con, e.getId()) == null) {
-                    insertProvincia(con, e.getId(), e.getNome());
-                }
-            }
-            desconexion(con);
-        }
-    }
-
-    public static String leerJson(File archivo) {
-        String entrada = "";
-        try {
-            InputStream stream = new FileInputStream(archivo);
-            InputStreamReader reader = new InputStreamReader(stream, "UTF-8");
-
-            int caracter;
-            while ((caracter = reader.read()) != -1) {
-                entrada += (char) caracter;
-            }
-
-            reader.close();
-
-        } catch (IOException e) {
-            System.out.println("No se ha podido leer el fichero");
-        }
-        return entrada;
-    }
+    private static final String rutaJson = System.getProperty("user.dir") + File.separator + "Provincias.json";
+    public static final String rutaBBDD = System.getProperty("user.dir") + File.separator + "BBDDsqlite";
 
     public static Connection conexion() {
 
@@ -75,7 +30,7 @@ public class Metodos {
 
         try {
             Connection con;
-            con = DriverManager.getConnection("jdbc:sqlite:" + rutaBBDD + "\\Tarea3.db");
+            con = DriverManager.getConnection("jdbc:sqlite:" + rutaBBDD + "Tarea3.db");
 
             return con;
 
@@ -88,21 +43,6 @@ public class Metodos {
     public static void desconexion(Connection con) {
         try {
             con.close();
-
-        } catch (SQLException ex) {
-            System.err.println(ex.getSQLState());
-        }
-    }
-
-    public static void insertProvincia(Connection con, int id, String nome) {
-
-        try {
-            String sql = "INSERT INTO provincia(id,nome) VALUES(?,?)";
-            PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, id);
-            pstmt.setString(2, nome);
-            pstmt.executeUpdate();
-            System.out.println("Insert" + nome);
 
         } catch (SQLException ex) {
             System.err.println(ex.getSQLState());
@@ -129,7 +69,22 @@ public class Metodos {
 
     }
 
-    public static String selectProvincia(Connection con) {
+    public static void insertProvincia(Connection con, int id, String nome) {
+
+        try {
+            String sql = "INSERT INTO provincia(id,nome) VALUES(?,?)";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, id);
+            pstmt.setString(2, nome);
+            pstmt.executeUpdate();
+            System.out.println("Insert" + nome);
+
+        } catch (SQLException ex) {
+            System.err.println(ex.getSQLState());
+        }
+    }
+
+    public static String selectProvincias(Connection con) {
         String provincias = "";
         try {
             String sql = " select * from provincia Order by id";
@@ -150,7 +105,7 @@ public class Metodos {
 
     }
 
-    public static String selectTendas(Connection con, int idProvincia) {
+    public static String selectTenda(Connection con, int idProvincia) {
 
         String tendas = "";
         try {
@@ -315,20 +270,6 @@ public class Metodos {
         }
     }
 
-    public static boolean isNumeric(String cadena) {
-
-        boolean resultado;
-
-        try {
-            Integer.parseInt(cadena);
-            resultado = true;
-        } catch (NumberFormatException excepcion) {
-            resultado = false;
-        }
-
-        return resultado;
-    }
-
     public static void insertProducto(Connection con, String nome, String descripcion, int prezo) {
 
         try {
@@ -343,6 +284,68 @@ public class Metodos {
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
         }
+    }
+
+    public static void leerJson() {
+
+        System.out.println(rutaJson);
+        System.out.println(rutaBBDD);
+
+        //leemos el json
+        Gson gson = new Gson();
+        java.lang.reflect.Type tipoProvincias = new TypeToken<ArrayList<Provincia>>() {
+        }.getType();
+
+        // serializamos el archivo en un array de objetos provincia
+        if (new File(rutaJson).exists()) {
+
+            ArrayList<Provincia> provincias = gson.fromJson(leerJson(new File(rutaJson)), tipoProvincias);
+
+            //creamos la conexion a bd y tablas
+            Connection con = conexion();
+            CrearTablas.crearTablas(con);
+
+            //recprrecos cada provincia del array e insertamos en la tabla si no existe 
+            for (Provincia e : provincias) {
+                if (selectProvincia(con, e.getId()) == null) {
+                    insertProvincia(con, e.getId(), e.getNome());
+                }
+            }
+            desconexion(con);
+        }
+    }
+
+    public static String leerJson(File archivo) {
+        String entrada = "";
+        try {
+            InputStream stream = new FileInputStream(archivo);
+            InputStreamReader reader = new InputStreamReader(stream, "UTF-8");
+
+            int caracter;
+            while ((caracter = reader.read()) != -1) {
+                entrada += (char) caracter;
+            }
+
+            reader.close();
+
+        } catch (IOException e) {
+            System.out.println("No se ha podido leer el fichero");
+        }
+        return entrada;
+    }
+
+    public static boolean isNumeric(String cadena) {
+
+        boolean resultado;
+
+        try {
+            Integer.parseInt(cadena);
+            resultado = true;
+        } catch (NumberFormatException excepcion) {
+            resultado = false;
+        }
+
+        return resultado;
     }
 
 }

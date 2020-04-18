@@ -11,7 +11,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 public class Main extends javax.swing.JFrame {
 
-    public String texto;
+    public String texto = "";
 
     public Main() {
         initComponents();
@@ -25,7 +25,7 @@ public class Main extends javax.swing.JFrame {
 
         //leemos proovincias de la BBDD y pintamos textArea
         Connection con = conexion();
-        jTextArea1.setText(selectProvincia(con));
+        jTextArea1.setText(selectProvincias(con));
 
     }
 
@@ -88,7 +88,7 @@ public class Main extends javax.swing.JFrame {
                 .addComponent(jButton2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton3)
-                .addContainerGap(142, Short.MAX_VALUE))
+                .addContainerGap(79, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -104,7 +104,7 @@ public class Main extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 963, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 971, Short.MAX_VALUE)
                         .addComponent(jButton1)))
                 .addContainerGap())
         );
@@ -114,15 +114,14 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 544, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton1)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -150,7 +149,7 @@ public class Main extends javax.swing.JFrame {
             ArrayList<Noticia> noticias = persoasXML.getNoticias();
             for (int i = 0; i < noticias.size(); i++) {
                 Noticia noticiaAux = noticias.get(i);
-                texto += "Titulo " + (i + 1) + ": " + noticiaAux.getTitulo() + "\n";
+                texto += "Noticia " + (i + 1) + ": " + noticiaAux.getTitulo() + "\n";
             }
 
             jTextArea1.setText(texto);
@@ -172,7 +171,7 @@ public class Main extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         Connection con = conexion();
-        jTextArea1.setText(selectProvincia(con));
+        jTextArea1.setText(selectProvincias(con));
         desconexion(con);
     }//GEN-LAST:event_jButton3ActionPerformed
 
