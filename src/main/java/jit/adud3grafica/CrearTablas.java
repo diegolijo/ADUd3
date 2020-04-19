@@ -33,7 +33,6 @@ public class CrearTablas {
                     + "(id INTEGER PRIMARY KEY AUTOINCREMENT, "
                     + "nome TEXT NOT NULL , "
                     + "idProvincia INTEGER NOT NULL, "
-                    + "Provincia TEXT NOT NULL , "
                     + "cidade TEXT NOT NULL )";
             Statement stmt = con.createStatement();
             stmt.execute(sql);

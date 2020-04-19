@@ -1,4 +1,6 @@
-package jit.adud3grafica;
+package Objetos;
+
+
 
 
 public class Provincia {
