@@ -154,18 +154,17 @@ public class OperacionesBD {
             return null;
         }
     }
-    
-    
+
     public static Tenda selectTenda(Connection con, int idTenda) {
 
-        Tenda tenda= null;
+        Tenda tenda = null;
         try {
             String sql = " select * from producto  Where id = " + idTenda;
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
-                tenda= new Tenda(idTenda, rs.getString("nome"), rs.getString("idProvincia"), rs.getInt("cidade"));
+                tenda = new Tenda(idTenda, rs.getString("nome"), rs.getString("idProvincia"), rs.getInt("cidade"));
 
             }
 
@@ -173,7 +172,7 @@ public class OperacionesBD {
 
         } catch (SQLException ex) {
             System.err.println(ex.getSQLState());
-            return null;
+            return tenda;
         }
     }
 
@@ -197,40 +196,92 @@ public class OperacionesBD {
     public static void deleteTenda(Connection con, Tenda tenda) {
 
         try {
-            String sql = "DELETE FROM tenda WHERE id = ? and idProvincia = ? ";
+            String sql = "DELETE FROM tenda WHERE id = ?";
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, tenda.getIdTenda());
-            pstmt.setInt(2, tenda.getIdProvincia());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
 
     }
+    
+     public static void deleteCliente(Connection con, Cliente cliente) {
+
+        try {
+            String sql = "DELETE FROM cliente WHERE id = ?";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, cliente.getIdCliente());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+
+    }
+    
+    
 
     //--------------------------------------------------------
-    public static String selectProductos(Connection con) {
+    public static ArrayList<Producto> selectProductos(Connection con) {
 
-        String productos = "";
+        ArrayList<Producto> productos = new ArrayList();
         try {
             String sql = "select * from producto Order by id ";
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
-                productos += rs.getInt("id");
-                productos += "\t" + rs.getString("nome");
-                productos += "\t" + rs.getString("descripcion");
-                productos += "\t" + rs.getString("prezo") + " €\n";
+                Producto prod = new Producto(rs.getInt("id"), rs.getString("nome"), rs.getString("descripcion"), rs.getInt("prezo"));
+                productos.add(prod);
             }
 
             return productos;
 
         } catch (SQLException ex) {
             System.err.println(ex.getSQLState());
-            return "No hay Productos";
+            return null;
+        }
+
+    }
+
+    public static void deleteProducto(Connection con, Producto prod) {
+        try {
+            String sql = "DELETE FROM producto WHERE id = ?";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, prod.getIdProducto());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
         }
     }
+    
+    
+      public static void deleteStockProducto(Connection con, Producto prod) {
+        try {
+            String sql = "DELETE FROM stockproducto WHERE id = ?";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, prod.getIdProducto());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+      
+       public static void deleteStockTenda(Connection con, Tenda tendas) {
+        try {
+            String sql = "DELETE FROM stockproducto WHERE idTenda = ?";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, tendas.getIdTenda());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+    
+  
+    
+    
+    
 
     public static String selectProducto(Connection con, int idProducto) {
 
@@ -275,6 +326,26 @@ public class OperacionesBD {
         }
     }
 
+    public static String selectStockProductoxTenda(Connection con, int idProducto, int idTenda) {
+        String productos = "No hay stock";
+
+        try {
+            String sql = " select * from stockproducto Where id = " + idProducto + " and idTenda = " + idTenda;
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                productos = rs.getInt("cantidad") + "";
+            }
+
+            return productos;
+
+        } catch (SQLException ex) {
+            System.err.println(ex.getSQLState());
+            return "No hay stock";
+        }
+    }
+
     public static String selectStockTenda(Connection con, int idTenda) {
         String productos = "";
 
@@ -297,15 +368,15 @@ public class OperacionesBD {
         }
     }
 
-    public static void insertProducto(Connection con, String nome, String descripcion, int prezo) {
+    public static void insertProducto(Connection con, Producto producto) {
 
         try {
             String sql = "INSERT INTO producto(nome,descripcion,prezo) VALUES(?,?,?)";
             PreparedStatement pstmt = con.prepareStatement(sql);
 
-            pstmt.setString(1, nome);
-            pstmt.setString(2, descripcion);
-            pstmt.setInt(3, prezo);
+            pstmt.setString(1, producto.getNome());
+            pstmt.setString(2, producto.getDescripcion());
+            pstmt.setFloat(3, producto.getPrecio());
             pstmt.executeUpdate();
 
         } catch (SQLException ex) {
@@ -313,4 +384,57 @@ public class OperacionesBD {
         }
     }
 
+    public static void insertStockProducto(Connection con, Producto producto, Tenda tenda, int cantidade) {
+
+        try {
+            String sql = "INSERT INTO stockproducto(id,idTenda,cantidad) VALUES(?,?,?)";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+
+            pstmt.setInt(1, producto.getIdProducto());
+            pstmt.setInt(2, tenda.getIdTenda());
+            pstmt.setInt(3, cantidade);
+            pstmt.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
+    }
+
+    public static ArrayList<Cliente> selectClientes(Connection con) {
+
+        ArrayList<Cliente> clientes = new ArrayList();
+        try {
+            String sql = " select * from cliente ";
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                Cliente cliente = new Cliente(rs.getInt("id"), rs.getString("nome"), rs.getString("apellidos"), rs.getString("email"));
+                clientes.add(cliente);
+            }
+
+            return clientes;
+
+        } catch (SQLException ex) {
+            System.err.println(ex.getSQLState());
+            return null;
+        }
+    }
+    
+     public static void insertCliente(Connection con, Cliente cliente) {
+
+        try {
+            String sql = "INSERT INTO cliente(nome,apellidos,email) VALUES(?,?,?)";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+
+            pstmt.setString(1, cliente.getNombre());
+            pstmt.setString(2, cliente.getApellidos());
+            pstmt.setString(3, cliente.getEmail());
+
+            pstmt.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.err.println(ex.getSQLState());
+        }
+    }
 }

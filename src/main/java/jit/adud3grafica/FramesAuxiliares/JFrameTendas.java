@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import static jit.adud3grafica.Metodos.*;
 import static jit.adud3grafica.OperacionesBD.*;
 
@@ -24,6 +25,7 @@ import static jit.adud3grafica.OperacionesBD.*;
 public class JFrameTendas extends javax.swing.JFrame {
 
     private Tenda tenda;
+    private Producto producto;
 
     /**
      * Creates new form tendas
@@ -33,7 +35,9 @@ public class JFrameTendas extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
 
         formatearCombos();
+        
         llenarComboProvincias();
+        llenarComboProductos();
 
     }
 
@@ -48,9 +52,15 @@ public class JFrameTendas extends javax.swing.JFrame {
 
         jComboBoxProv = new javax.swing.JComboBox<>();
         jComboBoxTenda = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
+        jButtonEliminar = new javax.swing.JButton();
+        jTextFieldNome = new javax.swing.JTextField();
+        jButtonInsertar = new javax.swing.JButton();
+        jTextFieldCidade = new javax.swing.JTextField();
+        jComboBoxProd = new javax.swing.JComboBox<>();
+        jTextFieldCantidade = new javax.swing.JTextField();
+        jButtonInsertar1 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jComboBoxProv.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -64,10 +74,51 @@ public class JFrameTendas extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Eliminar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonEliminar.setText("Eliminar");
+        jButtonEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButtonEliminarActionPerformed(evt);
+            }
+        });
+
+        jTextFieldNome.setText("None");
+        jTextFieldNome.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTextFieldNomeMouseClicked(evt);
+            }
+        });
+
+        jButtonInsertar.setText("Insertar");
+        jButtonInsertar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonInsertarActionPerformed(evt);
+            }
+        });
+
+        jTextFieldCidade.setText("Cidade");
+        jTextFieldCidade.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTextFieldCidadeMouseClicked(evt);
+            }
+        });
+
+        jComboBoxProd.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBoxProdItemStateChanged(evt);
+            }
+        });
+
+        jTextFieldCantidade.setText("Cantidade");
+        jTextFieldCantidade.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTextFieldCantidadeMouseClicked(evt);
+            }
+        });
+
+        jButtonInsertar1.setText("Actualizar Stock");
+        jButtonInsertar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonInsertar1ActionPerformed(evt);
             }
         });
 
@@ -77,11 +128,24 @@ public class JFrameTendas extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jComboBoxProv, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBoxTenda, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jComboBoxProd, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jTextFieldNome)
+                            .addComponent(jComboBoxProv, 0, 189, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jComboBoxTenda, 0, 189, Short.MAX_VALUE)
+                            .addComponent(jTextFieldCidade)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jTextFieldCantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonInsertar1, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButtonInsertar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -91,8 +155,19 @@ public class JFrameTendas extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBoxProv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBoxTenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
-                .addContainerGap(154, Short.MAX_VALUE))
+                    .addComponent(jButtonEliminar))
+                .addGap(8, 8, 8)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldCidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonInsertar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jComboBoxProd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldCantidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonInsertar1))
+                .addContainerGap(56, Short.MAX_VALUE))
         );
 
         pack();
@@ -104,22 +179,122 @@ public class JFrameTendas extends javax.swing.JFrame {
 
     private void jComboBoxProvItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxProvItemStateChanged
         llenarComboTendas();
+        llenarComboProductos();
     }//GEN-LAST:event_jComboBoxProvItemStateChanged
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if (tenda.getIdTenda()!=0) {
+    private void jButtonEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEliminarActionPerformed
+
+        //eliminar tienda
+        if (tenda.getIdTenda() != 0) {
             try {
                 Connection con = conexion();
                 deleteTenda(con, tenda);
-                llenarComboTendas();             
-                
+                deleteStockTenda(con, tenda);
+                llenarComboTendas();
+                llenarComboProductos();
+
                 con.close();
             } catch (SQLException ex) {
                 Logger.getLogger(JFrameTendas.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButtonEliminarActionPerformed
+
+    private void jButtonInsertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInsertarActionPerformed
+
+        Provincia prov = (Provincia) jComboBoxProv.getSelectedItem();
+        String cidade = jTextFieldCidade.getText();
+        String nome = jTextFieldNome.getText();
+        int id = prov.getId();
+
+        if (id == 0) {
+            JOptionPane.showMessageDialog(null, "Selecciona unha provincia", "Aviso", 2);
+        } else if ("".equals(nome) || "".equals(cidade) || "Cidade".equals(cidade) || "Nome".equals(nome)) {
+            JOptionPane.showMessageDialog(null, "Introduce nome e cidade", "Aviso", 2);
+        } else {
+            try {
+
+                Tenda tenda = new Tenda(0, nome, cidade, id);
+                Connection con = conexion();
+                insertTenda(con, tenda);
+                con.close();
+
+                llenarComboTendas();
+                llenarComboProductos();
+                jTextFieldNome.setText("Nome");
+                jTextFieldCidade.setText("Cidade");
+
+            } catch (SQLException ex) {
+                Logger.getLogger(JFrameTendas.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+
+    }//GEN-LAST:event_jButtonInsertarActionPerformed
+
+    private void jTextFieldNomeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldNomeMouseClicked
+        jTextFieldNome.setText("");
+    }//GEN-LAST:event_jTextFieldNomeMouseClicked
+
+    private void jTextFieldCidadeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldCidadeMouseClicked
+        jTextFieldCidade.setText("");
+    }//GEN-LAST:event_jTextFieldCidadeMouseClicked
+
+    private void jComboBoxProdItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxProdItemStateChanged
+
+        producto = (Producto) jComboBoxProd.getSelectedItem();
+
+        if (producto == null) {
+            producto = new Producto(0, "", "", 0);
+        } else if (producto.getIdProducto() == 0) {
+            jTextFieldCantidade.setText("Cantidade");
+        } else if (tenda.getIdTenda() != 0){
+
+            try {
+                Connection con = conexion();
+                String cantidade = selectStockProductoxTenda(con, producto.getIdProducto(), tenda.getIdTenda());              
+                jTextFieldCantidade.setText(cantidade);
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(JFrameTendas.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+    }//GEN-LAST:event_jComboBoxProdItemStateChanged
+
+    private void jTextFieldCantidadeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldCantidadeMouseClicked
+        jTextFieldCantidade.setText("");
+    }//GEN-LAST:event_jTextFieldCantidadeMouseClicked
+
+    private void jButtonInsertar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInsertar1ActionPerformed
+
+        Tenda tenda = (Tenda) jComboBoxTenda.getSelectedItem();
+        Producto producto = (Producto) jComboBoxProd.getSelectedItem();
+        String cantidadeString = jTextFieldCantidade.getText();
+        int cantidade = 0;
+        if (!isFloat(cantidadeString)) {
+            JOptionPane.showMessageDialog(null, "Introduce un valor numerico no campo cantidade", "Aviso", 2);
+        } else {
+            cantidade = Integer.parseInt(cantidadeString);
+        }
+
+        if (tenda.getIdTenda() == 0 && producto.getIdProducto() == 0) {
+            JOptionPane.showMessageDialog(null, "Selecciona unha tenda e producto", "Aviso", 2);
+        } else {
+            try {
+                Connection con = conexion();
+                insertStockProducto(con, producto, tenda, cantidade);
+                con.close();
+                llenarComboProductos();
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(JFrameTendas.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+
+    }//GEN-LAST:event_jButtonInsertar1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -160,12 +335,19 @@ public class JFrameTendas extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButtonEliminar;
+    private javax.swing.JButton jButtonInsertar;
+    private javax.swing.JButton jButtonInsertar1;
+    private javax.swing.JComboBox<Producto> jComboBoxProd;
     private javax.swing.JComboBox<Provincia> jComboBoxProv;
     private javax.swing.JComboBox<Tenda> jComboBoxTenda;
+    private javax.swing.JTextField jTextFieldCantidade;
+    private javax.swing.JTextField jTextFieldCidade;
+    private javax.swing.JTextField jTextFieldNome;
     // End of variables declaration//GEN-END:variables
 
     public void formatearCombos() {
+        
         //vista de los valores en los combos
         jComboBoxProv.setRenderer(new DefaultListCellRenderer() {
 
@@ -201,6 +383,22 @@ public class JFrameTendas extends javax.swing.JFrame {
             }
         });
 
+        jComboBoxProd.setRenderer(new DefaultListCellRenderer() {
+
+            @Override
+            public Component getListCellRendererComponent(
+                    JList list, Object value, int index,
+                    boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index,
+                        isSelected, cellHasFocus);
+
+                if (value != null) {
+                    Producto producto = (Producto) value;
+                    setText(producto.getNome());
+                }
+                return this;
+            }
+        });
     }
 
     public void llenarComboProvincias() {
@@ -255,6 +453,26 @@ public class JFrameTendas extends javax.swing.JFrame {
 
         }
 
+    }
+
+    private void llenarComboProductos() {
+        try {
+            //llenamos el conboBox de los productos  existentes
+            jComboBoxProd.removeAllItems();
+
+            Producto producto0 = new Producto(0, "Selecciona Producto", "", 0);
+            jComboBoxProd.addItem(producto0);
+
+            Connection con = conexion();
+
+            List<Producto> productos = selectProductos(con);
+            for (Producto p : productos) {
+                jComboBoxProd.addItem(p);
+            }
+            con.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(JFrameTendas.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

@@ -17,9 +17,7 @@ public class Tenda {
         this.idProvincia=idProvincia;     
     }
 
-    /*
-     *  Getters 
-     */
+    // Getters 
     
     public int getIdTenda() {
         return idTenda;

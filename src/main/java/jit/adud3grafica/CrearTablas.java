@@ -13,6 +13,7 @@ public class CrearTablas {
         createTenda(con);
         createProducto(con);
         createStockProducto(con);
+       createCliente(con);
     }
 
     public static void createProvincia(Connection con) {
@@ -73,11 +74,11 @@ public class CrearTablas {
 
     public static void createCliente(Connection con) {
         try {
-            String sql = "CREATE TABLE IF NOT EXISTS empleado ("
+            String sql = "CREATE TABLE IF NOT EXISTS cliente ("
                     + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                     + "nome TEXT NOT NULL , "
                     + "apellidos TEXT NOT NULL, "
-                    + "email TEXT NOT NULL)";
+                    + "email TEXT NOT NULL UNIQUE)";
             Statement stmt = con.createStatement();
             stmt.execute(sql);
 

@@ -73,12 +73,12 @@ public class Metodos {
         return entrada;
     }
 
-    public static boolean isNumeric(String cadena) {
+    public static boolean isFloat(String cadena) {
 
         boolean resultado;
 
         try {
-            Integer.parseInt(cadena);
+            Float.parseFloat(cadena);
             resultado = true;
         } catch (NumberFormatException excepcion) {
             resultado = false;
